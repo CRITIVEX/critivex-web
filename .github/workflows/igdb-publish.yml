@@ -11,6 +11,10 @@ on:
         description: Resume after this IGDB ID (0 for beginning)
         type: string
         default: '0'
+      full_import:
+        description: Import all remaining games until catalogue is exhausted
+        type: boolean
+        default: true
       max_pages:
         description: Number of pages (1-100, 500 games per page)
         type: string
@@ -24,12 +28,13 @@ jobs:
   import:
     if: inputs.permission_confirmed
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 350
     env:
       IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
       IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
       SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
       NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+      IGDB_FULL_IMPORT: ${{ inputs.full_import }}
       IGDB_START_ID: ${{ inputs.start_id }}
       IGDB_MAX_PAGES: ${{ inputs.max_pages }}
     steps:
@@ -38,6 +43,8 @@ jobs:
         with:
           node-version: '22'
       - run: node scripts/igdb-sync.mjs
-      - run: node scripts/igdb-publish.mjs
-      - name: Print resume cursor after successful import
+      - if: ${{ !inputs.full_import }}
+        run: node scripts/igdb-publish.mjs
+      - if: ${{ !inputs.full_import }}
+        name: Print resume cursor after successful import
         run: node -e "const r=require('./igdb-import.json'); console.log('Next start_id:',r.at(-1)?.id ?? process.env.IGDB_START_ID)"
