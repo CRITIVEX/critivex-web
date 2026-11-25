@@ -1,0 +1,1 @@
+import Link from 'next/link';export default function NotFound(){return <section className="hero"><span className="eyebrow">404</span><h1>Page not found.</h1><p>The content may have moved or has not been published.</p><Link className="cta" href="/">Return home</Link> <Link className="text-link" href="/search">Search Critivex</Link></section>}

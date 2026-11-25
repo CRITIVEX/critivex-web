@@ -1,0 +1,7 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import './globals.css';
+import {siteUrl} from '../lib/site';
+export const metadata: Metadata = {title:{default:'Critivex | Beyond the Score',template:'%s | Critivex'},description:'Independent gaming reviews, news and ratings.',metadataBase:siteUrl()?new URL(siteUrl()!):undefined,robots:siteUrl()?undefined:{index:false,follow:false}};
+const links=['Games','Reviews','News','Scores','Rankings','Search','Community','Critics','Publishers','Editorial','Account'];
+export default function Layout({children}:{children:React.ReactNode}) {return <html lang="en"><body><a className="skip" href="#content">Skip to content</a><div className="topline">INDEPENDENT GAMING MEDIA <span>AUSTRALIA · WORLDWIDE</span></div><header><Link className="brand" href="/" aria-label="Critivex home"><svg viewBox="0 0 64 64" width="38" aria-hidden="true"><path d="M49 13H23L9 32l14 19h26L39 40H28l-6-8 6-8h11z" fill="#8b5cf6"/><path d="m32 24 13 8-13 8z" fill="white"/></svg>CRITI<span>VEX</span></Link><nav aria-label="Main navigation">{links.map(x=><Link key={x} href={'/'+x.toLowerCase()}>{x}</Link>)}</nav></header><main id="content" tabIndex={-1}>{children}</main><footer><div><Link className="brand" href="/">CRITI<span>VEX</span></Link><p>Beyond the Score. Independent by design.</p></div><div><Link href="/editorial">Editorial standards</Link><br/><a href="mailto:critivex@outlook.com">Contact the editorial team</a></div><small>© {new Date().getFullYear()} Critivex</small></footer></body></html>}

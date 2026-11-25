@@ -1,0 +1,1 @@
+'use client';export default function ErrorPage({reset}:{error:Error&{digest?:string};reset:()=>void}){return <section className="panel"><h1>Something went wrong.</h1><p>Try loading this page again.</p><button className="cta" onClick={reset}>Try again</button></section>}

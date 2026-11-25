@@ -1,0 +1,2 @@
+# IGDB integration
+Register a confidential Twitch developer application at https://dev.twitch.tv/console/apps. Store IGDB_CLIENT_ID and IGDB_CLIENT_SECRET as GitHub Actions secrets. Run IGDB catalogue preview manually and inspect the artifact. This is a bounded read-only import preview, not an automatic production database sync. Confirm IGDB licensing and commercial-use permission before publishing metadata or artwork. Migration 005 adds catalogue metadata and aggregate leaderboard functions; apply after migration 004. No external critic scores are imported from IGDB.

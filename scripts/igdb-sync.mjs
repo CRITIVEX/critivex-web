@@ -1,0 +1,10 @@
+import {writeFile} from 'node:fs/promises';
+const id=process.env.IGDB_CLIENT_ID,secret=process.env.IGDB_CLIENT_SECRET;
+if(!id||!secret)throw new Error('IGDB_CLIENT_ID and IGDB_CLIENT_SECRET required');
+const tokenResponse=await fetch('https://id.twitch.tv/oauth2/token',{method:'POST',body:new URLSearchParams({client_id:id,client_secret:secret,grant_type:'client_credentials'}),signal:AbortSignal.timeout(15000)});
+if(!tokenResponse.ok)throw new Error('Twitch authentication failed: '+tokenResponse.status);
+const {access_token}=await tokenResponse.json();
+const response=await fetch('https://api.igdb.com/v4/games',{method:'POST',headers:{'Client-ID':id,Authorization:'Bearer '+access_token,'Content-Type':'text/plain'},body:'fields id,name,slug,summary,first_release_date,cover.image_id,screenshots.image_id,videos.video_id,genres.name,platforms.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; where first_release_date != null & cover != null; sort first_release_date desc; limit 100;',signal:AbortSignal.timeout(20000)});
+if(!response.ok)throw new Error('IGDB request failed: '+response.status);
+const rows=await response.json();if(!Array.isArray(rows))throw new Error('Invalid IGDB response');
+await writeFile('igdb-import.json',JSON.stringify(rows,null,2)+'\n');console.log('Prepared '+rows.length+' records for editorial review. No database writes performed.');

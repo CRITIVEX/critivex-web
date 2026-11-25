@@ -1,0 +1,1 @@
+export type Publisher={slug:string;name:string;kind:'Developer'|'Publisher'|'Both';website:string;description:string;verified:boolean};export const publishers:Publisher[]=[];

@@ -1,0 +1,2 @@
+export const dynamic='force-dynamic';
+import {liveNews} from '../../lib/public-content';import NewsList from './news-list';export const metadata={title:'Gaming news',description:'Independent gaming industry coverage and announcements.'};export default async function News(){return <><span className="eyebrow">CRITIVEX NEWSROOM</span><h1>Gaming news.</h1><p>Industry coverage, announcements and stories that matter to players.</p><NewsList articles={(await liveNews())}/></>}

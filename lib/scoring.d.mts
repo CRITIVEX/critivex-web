@@ -1,0 +1,1 @@
+export function verdict(score:number):string;export function average(scores:number[]):number|null;

@@ -1,0 +1,1 @@
+export type Critic={slug:string;name:string;outletSlug:string;bio:string;verified:boolean};export type Outlet={slug:string;name:string;website:string;description:string;verified:boolean};export const critics:Critic[]=[];export const outlets:Outlet[]=[];

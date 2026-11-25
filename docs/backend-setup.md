@@ -1,0 +1,3 @@
+# Backend activation
+
+The migrations are prepared but not applied. Run 001 then 002 in a new Supabase project after reviewing them. Create an account and assign its UUID the admin role using the SQL editor as database owner; never allow users to assign their own roles. Test policies with anonymous, player, writer, editor and moderator accounts before deployment. The browser-local workspaces are not connected to these tables. Authentication UI, session handling, publishing integration, storage policies, aggregate score RPCs and migration tests remain required. Never expose a service-role key in the browser. Configure production HTTPS origin and update CSP connect-src for the chosen Supabase origin when activating.

@@ -1,0 +1,1 @@
+export default function Loading(){return <section className="panel" role="status" aria-live="polite"><h2>Loading Critivex…</h2></section>}

@@ -1,0 +1,9 @@
+export type Game={slug:string;title:string;developer:string;publisher:string;releaseDate:string;genres:string[];platforms:string[];description:string;coverImageId?:string|null;screenshotImageIds?:string[];trailerVideoIds?:string[]};
+export const games:Game[]=[
+{slug:'hades',title:'Hades',developer:'Supergiant Games',publisher:'Supergiant Games',releaseDate:'2020-09-17',genres:['Action','Roguelike'],platforms:['PC','Switch','PS4','PS5','Xbox One','Xbox Series'],description:'An action roguelike inspired by Greek mythology.'},
+{slug:'elden-ring',title:'Elden Ring',developer:'FromSoftware',publisher:'Bandai Namco Entertainment',releaseDate:'2022-02-25',genres:['Action','RPG'],platforms:['PC','PS4','PS5','Xbox One','Xbox Series'],description:'An open-world action role-playing adventure in the Lands Between.'},
+{slug:'stardew-valley',title:'Stardew Valley',developer:'ConcernedApe',publisher:'ConcernedApe',releaseDate:'2016-02-26',genres:['Simulation','RPG'],platforms:['PC','Switch','PS4','Xbox One','Mobile'],description:'A farming and community life simulation.'},
+{slug:'portal-2',title:'Portal 2',developer:'Valve',publisher:'Valve',releaseDate:'2011-04-19',genres:['Puzzle'],platforms:['PC','PS3','Xbox 360','Switch'],description:'A first-person puzzle adventure built around portal mechanics.'},
+{slug:'hollow-knight',title:'Hollow Knight',developer:'Team Cherry',publisher:'Team Cherry',releaseDate:'2017-02-24',genres:['Action','Metroidvania'],platforms:['PC','Switch','PS4','Xbox One'],description:'Explore the interconnected underground kingdom of Hallownest.'},
+{slug:'cyberpunk-2077',title:'Cyberpunk 2077',developer:'CD Projekt Red',publisher:'CD Projekt',releaseDate:'2020-12-10',genres:['Action','RPG'],platforms:['PC','PS4','PS5','Xbox One','Xbox Series'],description:'An open-world role-playing game set in Night City.'}
+];

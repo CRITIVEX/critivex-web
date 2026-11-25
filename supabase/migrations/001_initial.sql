@@ -1,0 +1,15 @@
+create table public.games (id uuid primary key default gen_random_uuid(), slug text unique not null, title text not null, release_date date, created_at timestamptz not null default now());
+create table public.articles (id uuid primary key default gen_random_uuid(), slug text unique not null, title text not null, body text not null, kind text not null check(kind in ('news','review')), game_id uuid references public.games(id), score integer check(score between 0 and 100), published_at timestamptz, disclosure text, check(kind <> 'review' or (game_id is not null and score is not null)));
+create table public.player_ratings (game_id uuid references public.games(id) on delete cascade, user_id uuid references auth.users(id) on delete cascade, score integer not null check(score between 0 and 100), primary key(game_id,user_id));
+create table public.critic_reviews (id uuid primary key default gen_random_uuid(), game_id uuid not null references public.games(id), outlet text not null, source_url text unique not null, score integer not null check(score between 0 and 100), verified boolean not null default false);
+alter table public.games enable row level security;
+alter table public.articles enable row level security;
+alter table public.player_ratings enable row level security;
+alter table public.critic_reviews enable row level security;
+create policy games_read on public.games for select using(true);
+create policy articles_read on public.articles for select using(published_at <= now());
+create policy ratings_own_read on public.player_ratings for select to authenticated using(auth.uid()=user_id);
+create policy ratings_own_insert on public.player_ratings for insert to authenticated with check(auth.uid()=user_id);
+create policy ratings_own_update on public.player_ratings for update to authenticated using(auth.uid()=user_id) with check(auth.uid()=user_id);
+create policy ratings_own_delete on public.player_ratings for delete to authenticated using(auth.uid()=user_id);
+create policy verified_critics_read on public.critic_reviews for select using(verified);

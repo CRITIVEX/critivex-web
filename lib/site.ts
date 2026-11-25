@@ -1,0 +1,1 @@
+export function siteUrl(){const raw=process.env.NEXT_PUBLIC_SITE_URL;if(!raw)return null;try{const url=new URL(raw);return url.protocol==='https:'?url.origin:null}catch{return null}}
