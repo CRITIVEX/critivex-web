@@ -1,0 +1,43 @@
+name: IGDB bulk catalogue import
+on:
+  workflow_dispatch:
+    inputs:
+      permission_confirmed:
+        description: I have permission to import and publish this IGDB data
+        type: boolean
+        required: true
+        default: false
+      start_id:
+        description: Resume after this IGDB ID (0 for beginning)
+        type: string
+        default: '0'
+      max_pages:
+        description: Number of pages (1-100, 500 games per page)
+        type: string
+        default: '10'
+permissions:
+  contents: read
+concurrency:
+  group: igdb-catalogue-import
+  cancel-in-progress: false
+jobs:
+  import:
+    if: inputs.permission_confirmed
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+      IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+      IGDB_START_ID: ${{ inputs.start_id }}
+      IGDB_MAX_PAGES: ${{ inputs.max_pages }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/igdb-sync.mjs
+      - run: node scripts/igdb-publish.mjs
+      - name: Print resume cursor after successful import
+        run: node -e "const r=require('./igdb-import.json'); console.log('Next start_id:',r.at(-1)?.id ?? process.env.IGDB_START_ID)"
