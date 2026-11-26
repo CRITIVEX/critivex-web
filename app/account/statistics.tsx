@@ -1,0 +1,11 @@
+'use client';
+import {useEffect,useMemo,useState} from 'react';
+import {browserClient} from '../../lib/supabase';
+type Stats={library_total:number;wishlist:number;playing:number;completed:number;backlog:number;dropped:number;rating_count:number;average_rating:number|null};
+export default function Statistics(){
+ const c=useMemo(browserClient,[]);const [signed,S]=useState(false),[stats,V]=useState<Stats|null>(null),[error,E]=useState(''),[loading,L]=useState(false);
+ useEffect(()=>{if(!c)return;let active=true,seq=0;async function load(){const n=++seq;V(null);E('');L(true);try{const {data:{user}}=await c!.auth.getUser();if(!active||n!==seq)return;S(!!user);if(!user)return;const r=await c!.rpc('my_player_statistics').maybeSingle();if(!active||n!==seq)return;if(r.error)E('Gaming statistics temporarily unavailable.');else V(r.data as Stats|null)}catch{if(active&&n===seq)E('Gaming statistics temporarily unavailable.')}finally{if(active&&n===seq)L(false)}}void load();const {data:{subscription}}=c.auth.onAuthStateChange(event=>{if(event==='TOKEN_REFRESHED'||event==='USER_UPDATED')return;setTimeout(()=>{if(active)void load()},0)});return()=>{active=false;subscription.unsubscribe()}},[c]);
+ if(!signed)return null;
+ const completion=stats?.library_total?Math.round(stats.completed/stats.library_total*100):0;
+ return <section className="panel section cvx-player-stats"><span className="eyebrow">YOUR GAMING ACTIVITY</span><h2>Gaming statistics</h2><p>Private overview of your collection and ratings.</p>{loading?<p role="status">Loading statistics…</p>:error?<p role="status">{error}</p>:stats?<><div className="cvx-stat-grid">{[['Games saved',stats.library_total],['Completed',stats.completed],['Currently playing',stats.playing],['Wishlist',stats.wishlist],['Backlog',stats.backlog],['Dropped',stats.dropped],['Games rated',stats.rating_count],['Average rating',stats.average_rating==null?'—':stats.average_rating+'/100']].map(([label,value])=><div className="cvx-stat-card" key={label}><strong>{value}</strong><span>{label}</span></div>)}</div><div className="cvx-stat-completion"><strong>Library completion · {completion}%</strong><progress max={100} value={completion} aria-label="Library completion percentage"/><p>{stats.completed} of {stats.library_total} saved games completed.</p></div></>:<p>No statistics available.</p>}</section>
+}
