@@ -1,0 +1,33 @@
+/* Critivex publication design system */
+:root{--bg:#09090b;--panel:#18181f;--line:#30303b;--accent:#c4b5fd;--cvx-primary:#8b5cf6;--cvx-muted:#a1a1aa}
+body{background:#09090b;color:#f4f4f5;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:1536px;padding-inline:clamp(16px,4vw,64px);padding-top:32px}
+main h1{letter-spacing:-.045em;font-weight:800}main h2{font-size:clamp(22px,2.4vw,30px);letter-spacing:-.025em}main h3{letter-spacing:-.015em}
+p{color:#b4b4c0;line-height:1.65}.eyebrow{letter-spacing:.12em;color:#c4b5fd}
+.topline{background:#14101d;padding-block:7px;letter-spacing:.14em}
+.cvx-site-header{background:#101014;border-bottom:1px solid #30303b;padding-block:16px}
+.cvx-site-header .brand{font-style:normal;font-size:25px;letter-spacing:-.07em}
+.cvx-site-header .cvx-main-nav a{font-weight:650;border-radius:6px;padding:9px 10px}
+.cvx-site-header .cvx-main-nav a.is-active{background:#282036;color:#ddd6fe}
+.header-search-field{background:#1a1a22;border-color:#343440;border-radius:8px}
+.cta{background:#6d28d9;border:1px solid #8b5cf6;border-radius:8px;min-height:42px}.secondary{background:#1b1b24;border-color:#3c3c49;border-radius:8px;min-height:42px}.secondary:hover{border-color:#a78bfa;color:#e9ddff}
+.panel,.tile,.home-side,.home-feed,.home-method{background:var(--panel);border-color:var(--line);border-radius:12px}
+.page-intro{background:linear-gradient(110deg,#191721,#1f1830);border-color:#3a304b;border-radius:12px;padding:clamp(24px,4vw,48px);position:relative;overflow:hidden}
+.page-intro h1{font-size:clamp(32px,4.5vw,56px);margin:8px 0 12px}
+.home-mast{border-bottom:1px solid #3b3150}.home-lead{border-radius:12px;min-height:clamp(340px,38vw,530px)}
+.home-heading{border-bottom:1px solid var(--line);padding-bottom:12px}.home-heading h2{margin:3px 0}
+.home-game .home-cover{border-radius:7px;background:#17171e}.home-game strong{font-size:15px}.home-game:hover strong{color:#c4b5fd}
+.home-trend{padding-block:14px}.home-rank{font-variant-numeric:tabular-nums;color:#a78bfa}
+.filters{background:#15151c;border-color:var(--line);border-radius:10px}.filters input,.filters select,.admin-form input,.admin-form select,.admin-form textarea{background:#101015;border-color:#3c3c49;border-radius:7px}
+.game-section-nav,.cvx-public-nav{background:#15151c;border:1px solid var(--line);border-radius:9px;padding:8px}
+.game-detail-hero{border-radius:12px}.cvx-score-card{background:#1b1923;border-radius:10px}
+.score-row{padding:16px 4px;transition:background .15s}.score-row:hover{background:#211b2d}.score-placeholder{background:#201a2d;border-color:#403451;font-variant-numeric:tabular-nums}
+.admin-tabs{background:#14141b;border:1px solid var(--line);padding:10px;border-radius:10px}.admin-form{gap:16px}
+.cvx-footer{display:block;background:#111116;padding:40px max(4vw,20px) 20px;border-top:1px solid var(--line)}
+.cvx-footer-grid{max-width:1408px;margin:auto;display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:28px}
+.cvx-footer-brand p{max-width:290px}.cvx-footer-brand .brand{font-style:normal}
+.cvx-footer-links{display:grid;align-content:start;gap:10px;font-size:13px}.cvx-footer-links strong{color:#f4f4f5;font-size:15px;margin-bottom:5px}
+.cvx-footer-bottom{max-width:1408px;margin:30px auto 0;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px}
+.cvx-footer-bottom span{letter-spacing:.1em}
+@media(max-width:800px){.cvx-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.cvx-footer-grid{gap:24px 16px}.cvx-footer-brand{grid-column:1/-1}.cvx-footer-bottom{flex-direction:column}.cvx-site-header .brand{font-size:22px}}
