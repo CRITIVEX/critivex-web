@@ -270,3 +270,9 @@ button:disabled{cursor:not-allowed}
 .cvx-security-grid form{padding:18px;border:1px solid #393244;border-radius:10px;background:#17151e}
 .cvx-security>p{overflow-wrap:anywhere}
 @media(max-width:700px){.cvx-security-grid{grid-template-columns:1fr}}
+
+.cvx-notification-options{border:0;padding:0;margin:16px 0;min-width:0}
+.cvx-notification-option{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid #393244;cursor:pointer}
+.cvx-notification-option span{display:grid;gap:5px;min-width:0}.cvx-notification-option small{color:#a1a1aa}
+.cvx-notification-option input{width:22px;height:22px;flex-shrink:0;accent-color:#8b5cf6}
+.cvx-notification-options:disabled{opacity:.65}
