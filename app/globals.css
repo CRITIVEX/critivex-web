@@ -92,3 +92,5 @@ main .game-copy .unrated{border-color:#51416b;color:#ddd6fe}
 .header-result strong{font-size:14px}.header-result small{font-size:12px;color:#a1a1aa}
 .header-result:hover,.header-result.selected{background:#302044;color:white}
 @media(max-width:600px){.header-search{width:100%}.header-search-popover{left:0;right:auto}.header-actions{width:100%;flex-wrap:nowrap}}
+
+.account-panel{gap:18px}.account-panel button:disabled{opacity:.55;cursor:wait}.account-feedback,.account-error{padding:12px;border-radius:8px;background:#211932;border:1px solid #51416b;color:#ddd6fe;font-size:14px}.account-error{background:#30171e;border-color:#733743;color:#fecdd3}.account-grid:has(>div:nth-child(2):empty){grid-template-columns:minmax(0,560px);justify-content:center}.account-grid textarea{min-height:120px}.account-grid input:focus,.account-grid textarea:focus{border-color:#a78bfa}
