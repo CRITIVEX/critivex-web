@@ -11,14 +11,14 @@ const results=await Promise.allSettled(sections.map(async section=>{
 if(section==='games'){
 let q=c.from('games').select('slug,title,description,release_date');
 if(term)q=q.ilike('title','%'+term+'%');
-const {data,error}=await q.order(sort==='az'?'title':'release_date',{ascending:sort==='az',nullsFirst:false}).order('slug').range(from,from+size);
-if(error)throw new Error('Game search failed');
+const {data,error}=await q.order(sort==='az'?'title':'release_date',{ascending:sort==='az',nullsFirst:false}).order('id').range(from,from+size);
+if(error){console.error('Game search failed',error.code,error.message);throw new Error('Game search failed')}
 return {hasMore:(data?.length??0)>size,items:(data??[]).slice(0,size).map(g=>({title:g.title,description:g.description??'',url:'/games/'+g.slug,type:'Games',date:g.release_date??''}))};
 }
 let q=c.from('articles').select('slug,title,summary,published_at').eq('kind',section==='reviews'?'review':'news').lte('published_at',new Date().toISOString());
 if(term)q=q.or('title.ilike.%'+term+'%,summary.ilike.%'+term+'%');
 const {data,error}=await q.order(sort==='az'?'title':'published_at',{ascending:sort==='az'}).order('slug').range(from,from+size);
-if(error)throw new Error('Article search failed');
+if(error){console.error('Article search failed',error.code,error.message);throw new Error('Article search failed')}
 return {hasMore:(data?.length??0)>size,items:(data??[]).slice(0,size).map(a=>({title:a.title,description:a.summary??'',url:'/'+section+'/'+a.slug,type:section==='reviews'?'Reviews':'News',date:a.published_at??''}))};
 }));
 const ok=results.flatMap(r=>r.status==='fulfilled'?[r.value]:[]);const items=ok.flatMap(r=>r.items);const hasMore=ok.some(r=>r.hasMore);const failed=sections.filter((_,i)=>results[i].status==='rejected');return {items,total:items.length,pages:page+(hasMore?1:0),hasMore,failed};
