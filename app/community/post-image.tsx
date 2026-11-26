@@ -2,17 +2,23 @@
 import {useEffect,useMemo,useState} from 'react';
 import {browserClient} from '../../lib/supabase';
 const extensions:Record<string,string>={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};
-export function ImagePicker({file,onChange,disabled}:{file:File|null;onChange:(f:File|null)=>void;disabled:boolean}){
- const [preview,P]=useState(''),[error,E]=useState('');
- useEffect(()=>{if(!file){P('');return}const url=URL.createObjectURL(file);P(url);return()=>URL.revokeObjectURL(url)},[file]);
- return <div className="cvx-image-picker"><label>Attach screenshot or image<input type="file" accept="image/jpeg,image/png,image/webp" disabled={disabled} onChange={e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;if(!extensions[f.type]||f.size>5242880||!f.size){E('Choose a JPEG, PNG or WebP image up to 5 MB.');return}E('');onChange(f)}}/></label>{error&&<p role="alert">{error}</p>}{file&&<><img src={preview||undefined} alt="Selected attachment preview"/><button type="button" disabled={disabled} onClick={()=>onChange(null)}>Remove attachment</button></>}</div>
+export function ImagePicker({file,onChange,disabled}:{file:File[];onChange:(f:File[])=>void;disabled:boolean}){
+ const [error,E]=useState('');
+ return <div className="cvx-image-picker"><label>Attach up to four images<input type="file" multiple accept="image/jpeg,image/png,image/webp" disabled={disabled||file.length>=4} onChange={e=>{const list=Array.from(e.target.files??[]);e.target.value='';if(list.length+file.length>4||list.some(f=>!extensions[f.type]||f.size>5242880||!f.size)){E('Choose up to four JPEG, PNG or WebP images, 5 MB each.');return}E('');onChange([...file,...list])}}/></label>{error&&<p role="alert">{error}</p>}{file.map((f,i)=><div key={i}><LocalPreview file={f}/><button type="button" disabled={disabled} onClick={()=>onChange(file.filter((_,j)=>j!==i))}>Remove image {i+1}</button></div>)}</div>
 }
-export async function publishPost(c:NonNullable<ReturnType<typeof browserClient>>,uid:string,body:string,file:File|null){
- let path:string|null=null;
- if(file){if(!extensions[file.type]||file.size>5242880||!file.size)throw Error('Invalid attachment');path=uid+'/'+crypto.randomUUID()+'.'+extensions[file.type];const upload=await c.storage.from('social-images').upload(path,file,{contentType:file.type,upsert:false});if(upload.error)return {error:upload.error}}
- const result=await c.from('social_posts').insert({body:body.trim(),image_path:path});
- if(result.error&&path)await c.storage.from('social-images').remove([path]);
- return result;
+function LocalPreview({file}:{file:File}){const [url,U]=useState('');useEffect(()=>{const u=URL.createObjectURL(file);U(u);return()=>URL.revokeObjectURL(u)},[file]);return url?<img src={url} alt="Selected attachment"/>:null}
+export async function publishPost(c:NonNullable<ReturnType<typeof browserClient>>,uid:string,body:string,file:File[]){
+ const paths:string[]=[];
+ if(file.length>4||file.some(f=>!extensions[f.type]||f.size>5242880||!f.size))throw Error('Invalid attachments');
+ try{for(const f of file){const path=uid+'/'+crypto.randomUUID()+'.'+extensions[f.type];const upload=await c.storage.from('social-images').upload(path,f,{contentType:f.type,upsert:false});if(upload.error)throw upload.error;paths.push(path)}
+ const result=await c.from('social_posts').insert({body:body.trim(),image_path:paths[0]??null,image_paths:paths});if(result.error)throw result.error;return result;
+ }catch(error){if(paths.length)await c.storage.from('social-images').remove(paths);return {error}}
+}
+export function PostCarousel({id,path,uid}:{id:string;path:string|null;uid:string}){
+ const c=useMemo(browserClient,[]),[paths,P]=useState<string[]>([]),[index,I]=useState(0);
+ useEffect(()=>{P([]);I(0);if(!c)return;let active=true;void Promise.resolve(c.from('social_posts').select('image_paths').eq('id',id).maybeSingle()).then(r=>{if(active&&!r.error)P(r.data?.image_paths??[])}).catch(()=>{});return()=>{active=false}},[c,id,uid]);
+ const images=paths.length?paths:path?[path]:[];
+ if(!images.length)return null;return <div className="cvx-post-carousel"><PostImage path={images[Math.min(index,images.length-1)]} uid={uid}/>{images.length>1&&<div className="cvx-carousel-controls"><button type="button" disabled={index===0} onClick={()=>I(i=>i-1)}>← Previous</button><span>{index+1} / {images.length}</span><button type="button" disabled={index>=images.length-1} onClick={()=>I(i=>i+1)}>Next →</button></div>}</div>
 }
 export function PostImage({path,uid}:{path:string|null;uid:string}){
  const c=useMemo(browserClient,[]),[url,U]=useState(''),[failed,F]=useState(false);
