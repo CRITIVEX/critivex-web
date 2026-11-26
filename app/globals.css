@@ -77,3 +77,18 @@ main .article-body img{height:auto;border-radius:12px}
 main .admin-tabs button{padding:10px 14px;border-radius:8px}
 main .game-copy .unrated{border-color:#51416b;color:#ddd6fe}
 @media(max-width:700px){.account-grid{grid-template-columns:1fr}.page-intro{padding:22px}.page-intro h1{font-size:34px}}
+
+.header-search{position:relative;width:clamp(190px,22vw,320px);min-width:0;z-index:30}
+.header-search-field{display:flex;align-items:center;gap:10px;border:1px solid #3f3f46;border-radius:9px;background:#09090b;padding:9px 12px;color:#a1a1aa}
+.header-search-field:focus-within{border-color:#a78bfa}
+.header-search-field svg{flex-shrink:0}
+.header-search-field input{width:100%;min-width:0;background:transparent;color:#fafafa;font-size:14px;outline:none}
+.header-search-popover{position:absolute;top:calc(100% + 8px);right:0;width:min(400px,calc(100vw - 32px));max-height:65vh;overflow:auto;background:#17171e;border:1px solid #3f315a;border-radius:12px;box-shadow:0 16px 48px #0009;padding:10px}
+.header-search-caption{padding:8px 10px;font-size:10px;letter-spacing:1.5px;color:#b49aff;font-weight:800}
+.header-search-popover p{padding:4px 10px;font-size:13px}
+.header-result{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border-radius:7px}
+.header-result>span:first-child{min-width:0;overflow-wrap:anywhere}
+.header-result strong,.header-result small{display:block}
+.header-result strong{font-size:14px}.header-result small{font-size:12px;color:#a1a1aa}
+.header-result:hover,.header-result.selected{background:#302044;color:white}
+@media(max-width:600px){.header-search{width:100%}.header-search-popover{left:0;right:auto}.header-actions{width:100%;flex-wrap:nowrap}}
