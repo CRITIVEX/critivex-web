@@ -248,3 +248,10 @@ button:disabled{cursor:not-allowed}
 .cvx-stat-card{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid #393244;border-radius:10px;background:#1c1923}
 .cvx-stat-card strong{font-size:28px;color:#c4b5fd;font-variant-numeric:tabular-nums}.cvx-stat-card span{font-size:12px;color:#d4d4d8}
 .cvx-stat-completion progress{display:block;width:100%;height:12px;margin:12px 0;accent-color:#8b5cf6}
+
+.cvx-collection-layout{display:grid;grid-template-columns:minmax(160px,1fr) minmax(0,2fr);gap:24px;margin-top:20px}
+.cvx-collection-choice{display:flex;flex-direction:column;gap:5px;width:100%;text-align:left;padding:12px;margin-top:8px;background:#1c1923;border:1px solid #393244;border-radius:8px;overflow-wrap:anywhere}
+.cvx-collection-choice.is-active{border-color:#a78bfa}.cvx-collection-choice small{color:#a1a1aa}
+.cvx-collection-cover{width:100%;max-height:280px;object-fit:cover;border-radius:10px;margin-bottom:16px}
+.cvx-collection-game-art{width:100%;height:180px;object-fit:contain}
+@media(max-width:700px){.cvx-collection-layout{grid-template-columns:1fr}}
