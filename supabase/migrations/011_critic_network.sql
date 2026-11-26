@@ -1,0 +1,24 @@
+begin;
+create table if not exists public.critic_outlets(id uuid primary key default gen_random_uuid(),slug text unique not null check(slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),name text not null,website text not null check(website ~ '^https://'),description text not null default '',verified boolean not null default false);
+create table if not exists public.critic_profiles(id uuid primary key default gen_random_uuid(),slug text unique not null check(slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),name text not null,outlet_id uuid references public.critic_outlets(id),bio text not null default '',verified boolean not null default false);
+alter table public.critic_reviews add column if not exists outlet_id uuid references public.critic_outlets(id),add column if not exists critic_id uuid references public.critic_profiles(id),add column if not exists original_score numeric,add column if not exists original_scale numeric;
+alter table public.critic_reviews add constraint critic_original_scale_valid check ((original_score is null and original_scale is null) or (original_score is not null and original_scale is not null and original_scale>0 and original_score between 0 and original_scale));
+create or replace function public.normalize_critic_score() returns trigger language plpgsql set search_path='' as $$ begin
+if new.original_score is not null and new.original_scale>0 then new.score=round(new.original_score*100/new.original_scale); end if;
+if new.verified and new.outlet_id is not null and not exists(select 1 from public.critic_outlets where id=new.outlet_id and verified) then raise exception 'Verify publication first'; end if;
+if new.critic_id is not null and not exists(select 1 from public.critic_profiles where id=new.critic_id and outlet_id is not distinct from new.outlet_id and (not new.verified or verified)) then raise exception 'Critic must match publication and be verified before review verification'; end if;
+return new; end $$;
+drop trigger if exists normalize_critic_score on public.critic_reviews;
+create trigger normalize_critic_score before insert or update on public.critic_reviews for each row execute function public.normalize_critic_score();
+alter table public.critic_outlets enable row level security;
+alter table public.critic_profiles enable row level security;
+create policy outlet_public on public.critic_outlets for select using(verified);
+create policy profile_public on public.critic_profiles for select using(verified);
+create policy outlet_staff on public.critic_outlets for all to authenticated using(public.has_staff_role(array['admin','editor'])) with check(public.has_staff_role(array['admin','editor']));
+create policy profile_staff on public.critic_profiles for all to authenticated using(public.has_staff_role(array['admin','editor'])) with check(public.has_staff_role(array['admin','editor']));
+grant select on public.critic_outlets,public.critic_profiles to anon,authenticated;
+grant insert,update on public.critic_outlets,public.critic_profiles to authenticated;
+create index if not exists critic_reviews_game_verified_idx on public.critic_reviews(game_id) where verified;
+create index if not exists critic_reviews_outlet_idx on public.critic_reviews(outlet_id);
+create index if not exists critic_reviews_critic_idx on public.critic_reviews(critic_id);
+commit;
