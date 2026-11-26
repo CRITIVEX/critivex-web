@@ -1,0 +1,15 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import Link from 'next/link';
+import {usePathname} from 'next/navigation';
+type Item={title:string;url:string;type:string;date:string};
+export default function HeaderSearch(){
+ const [q,setQ]=useState(''),[open,setOpen]=useState(false),[items,setItems]=useState<Item[]>([]),[status,setStatus]=useState(''),[active,setActive]=useState(-1);
+ const root=useRef<HTMLDivElement>(null),path=usePathname();
+ useEffect(()=>{setOpen(false);setQ('')},[path]);
+ useEffect(()=>{const close=(e:PointerEvent)=>{if(!root.current?.contains(e.target as Node))setOpen(false)};document.addEventListener('pointerdown',close);return()=>document.removeEventListener('pointerdown',close)},[]);
+ useEffect(()=>{const term=q.trim();setItems([]);setActive(-1);if(term.length<2){setStatus('Type at least 2 characters');return}setStatus('Searching…');const controller=new AbortController();const timer=setTimeout(async()=>{try{const r=await fetch('/api/search?q='+encodeURIComponent(term),{signal:controller.signal});if(!r.ok)throw Error();const data=await r.json();if(controller.signal.aborted)return;setItems(data.items??[]);setStatus(data.failed?.length?'Some results are unavailable.':data.items?.length?'':'No matching results.')}catch{if(!controller.signal.aborted)setStatus('Search temporarily unavailable.')}},300);return()=>{clearTimeout(timer);controller.abort()}},[q]);
+ return <div ref={root} className="header-search"><div className="header-search-field"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input aria-label="Search Critivex" role="combobox" aria-expanded={open} aria-controls="header-search-results" aria-autocomplete="list" aria-activedescendant={open&&active>=0?'header-result-'+active:undefined} type="search" value={q} placeholder="Search Critivex…" onFocus={()=>setOpen(true)} onChange={e=>{setQ(e.target.value);setOpen(true)}} onKeyDown={e=>{if(e.key==='Escape'){setOpen(false);return}if(e.key==='ArrowDown'){e.preventDefault();setOpen(true);setActive(i=>Math.min(i+1,items.length-1))}if(e.key==='ArrowUp'){e.preventDefault();setActive(i=>Math.max(-1,i-1))}if(e.key==='Enter'&&open&&active>=0){e.preventDefault();document.getElementById('header-result-'+active)?.click()}}}/></div>
+ {open&&<div className="header-search-popover"><div className="header-search-caption">QUICK SEARCH</div>{status&&<p role="status">{status}</p>}<div id="header-search-results" role="listbox" aria-label="Search results">{items.map((item,i)=><Link id={'header-result-'+i} role="option" aria-selected={active===i} className={active===i?'header-result selected':'header-result'} key={item.url} href={item.url} onClick={()=>{setOpen(false);setQ('')}}><span><strong>{item.title}</strong><small>{item.type}{item.date?' · '+item.date.slice(0,4):''}</small></span><span aria-hidden="true">→</span></Link>)}</div></div>}
+ </div>
+}
