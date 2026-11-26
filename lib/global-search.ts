@@ -1,6 +1,6 @@
 import {publicCache} from './public-cache';
 import {createClient} from '@supabase/supabase-js';
-export type SearchItem={title:string;description:string;url:string;type:string;date:string};
+export type SearchItem={title:string;description:string;url:string;type:string;date:string;coverImageId?:string|null};
 async function loadGlobalSearch(query:string,type:string,sort:string,page:number){
 const url=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 if(!url||!key)return {items:[] as SearchItem[],total:0,pages:1,hasMore:false,failed:['Search configuration']};
@@ -13,7 +13,7 @@ if(section==='games'){
 if(term.length<3)return {hasMore:false,items:[] as SearchItem[]};
 const {data,error}=await c.rpc('browse_games',{search_term:term,sort_mode:sort==='az'?'az':'new',page_offset:from,page_size:size+1});
 if(error){console.error('Game search failed',error.code,error.message);throw new Error('Game search failed')}
-return {hasMore:(data?.length??0)>size,items:(data??[]).slice(0,size).map((g:{title:string;description:string|null;slug:string;release_date:string|null})=>({title:g.title,description:g.description??'',url:'/games/'+g.slug,type:'Games',date:g.release_date??''}))};
+return {hasMore:(data?.length??0)>size,items:(data??[]).slice(0,size).map((g:{title:string;description:string|null;slug:string;release_date:string|null;cover_image_id:string|null})=>({title:g.title,description:g.description??'',url:'/games/'+g.slug,type:'Games',date:g.release_date??'',coverImageId:g.cover_image_id}))};
 }
 let q=c.from('articles').select('slug,title,summary,published_at').eq('kind',section==='reviews'?'review':'news').lte('published_at',new Date().toISOString());
 if(term)q=q.or('title.ilike.%'+term+'%,summary.ilike.%'+term+'%');
