@@ -21,5 +21,8 @@ await check('/api/search?q=Call+of+Duty',search);
 await check('/api/search?q=Call+of+Duty',search);
 await check('/games/call-of-duty',body=>{assert.match(body,/Call of Duty/i);assert.doesNotMatch(body,/Unable to load game/i)});
 await check('/api/search?q=a',body=>assert.deepEqual(JSON.parse(body).items,[]));
+for(const [path,heading] of [['/','Discover. Play. Critique.'],['/news','Gaming news'],['/reviews','Editorial reviews'],['/rankings','Game rankings'],['/trending','Trending'],['/releases','Game release calendar'],['/community','Critivex community'],['/account','Account'],['/admin','Editorial workspace'],['/editorial','Editorial standards'],['/scores','Score']]){
+ await check(path,body=>{assert.ok(body.toLowerCase().includes(heading.toLowerCase()),path+' missing expected heading');assert.doesNotMatch(body,/Application error: a server-side exception|Internal Server Error/i);});
+}
 console.table(results);
 console.log('Production smoke checks passed. Timings include network and rendering; repeated requests do not prove a cache hit.');
