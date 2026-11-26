@@ -31,3 +31,12 @@ p{color:#b4b4c0;line-height:1.65}.eyebrow{letter-spacing:.12em;color:#c4b5fd}
 .cvx-footer-bottom span{letter-spacing:.1em}
 @media(max-width:800px){.cvx-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.cvx-footer-grid{gap:24px 16px}.cvx-footer-brand{grid-column:1/-1}.cvx-footer-bottom{flex-direction:column}.cvx-site-header .brand{font-size:22px}}
+
+.cvx-home-welcome{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:28px}.cvx-home-welcome h2{font-size:clamp(30px,4vw,48px);margin:6px 0;line-height:1.1}.cvx-home-welcome p{margin:0}.cvx-home-welcome>.secondary{flex-shrink:0}
+.cvx-discovery-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.cvx-discovery-strip a{display:flex;align-items:center;gap:12px;padding:16px;background:#18181f;border:1px solid var(--line);border-radius:10px;min-width:0}
+.cvx-discovery-strip a:hover{border-color:#8b5cf6;background:#211b2d}.cvx-discovery-strip a>span{color:#a78bfa;font-size:20px;font-weight:800}.cvx-discovery-strip a>div{flex:1;min-width:0}.cvx-discovery-strip strong,.cvx-discovery-strip small{display:block}.cvx-discovery-strip small{font-size:11px;font-weight:400;color:#a1a1aa;margin-top:4px}.cvx-discovery-strip b{color:#c4b5fd}
+.cvx-profile-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
+@media(min-width:1101px){.cvx-site-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 24px;padding-bottom:0}.cvx-site-header .brand{justify-self:start}.cvx-site-header .cvx-header-actions{grid-column:2;grid-row:1;justify-self:end}.cvx-site-header .cvx-main-nav{grid-column:1/-1;grid-row:2;justify-content:flex-start;border-top:1px solid var(--line);padding:8px 0;gap:8px}.cvx-site-header .cvx-main-nav a{padding:10px 18px}}
+@media(max-width:900px){.cvx-discovery-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.cvx-home-welcome{align-items:flex-start;flex-direction:column}.cvx-discovery-strip{gap:8px}.cvx-discovery-strip a{padding:12px;gap:8px}.cvx-discovery-strip a>span{font-size:15px}.cvx-discovery-strip b{display:none}.cvx-profile-button{font-size:12px}}
