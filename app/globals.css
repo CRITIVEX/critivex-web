@@ -276,3 +276,17 @@ button:disabled{cursor:not-allowed}
 .cvx-notification-option span{display:grid;gap:5px;min-width:0}.cvx-notification-option small{color:#a1a1aa}
 .cvx-notification-option input{width:22px;height:22px;flex-shrink:0;accent-color:#8b5cf6}
 .cvx-notification-options:disabled{opacity:.65}
+
+.cvx-account-dashboard{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start;margin:24px 0 48px}
+.cvx-account-sidebar{border:1px solid #393244;border-radius:14px;padding:16px;background:#17151e;position:sticky;top:16px;min-width:0}
+.cvx-account-identity{display:flex;align-items:center;gap:12px;padding:8px 0 20px;border-bottom:1px solid #393244;margin-bottom:12px}
+.cvx-account-identity div{min-width:0;display:grid;gap:4px}.cvx-account-identity small{overflow-wrap:anywhere;color:#a1a1aa}
+.cvx-account-avatar{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#4c1d95;color:#ede9fe;flex-shrink:0;font-weight:700}
+.cvx-account-sidebar nav{display:grid;gap:6px}.cvx-account-sidebar nav a{display:flex;align-items:center;min-height:44px;padding:10px 12px;border-radius:8px;color:#d4d4d8;text-decoration:none}
+.cvx-account-sidebar nav a:hover,.cvx-account-sidebar nav a.active{background:#302044;color:#ddd6fe}.cvx-account-sidebar nav a.active{box-shadow:inset 3px 0 #8b5cf6}
+.cvx-account-content{min-width:0;display:grid;gap:20px;align-content:start}.cvx-account-content>.panel{margin:0;width:100%;min-width:0}
+.cvx-account-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.cvx-account-card{display:flex;flex-direction:column;gap:8px;min-height:150px;margin:0;text-decoration:none}.cvx-account-card h2{font-size:19px;margin:0}.cvx-account-card p{margin:0}.cvx-account-card span{margin-top:auto;color:#c4b5fd;font-size:14px}.cvx-account-card:hover{border-color:#8b5cf6}
+.cvx-account-login{max-width:520px;margin:24px auto 48px}
+@media(max-width:900px){.cvx-account-dashboard{grid-template-columns:minmax(0,1fr);gap:16px}.cvx-account-sidebar{position:static}.cvx-account-sidebar nav{grid-template-columns:repeat(4,minmax(0,1fr))}.cvx-account-sidebar nav a{justify-content:center;text-align:center;font-size:13px;padding:8px}}
+@media(max-width:540px){.cvx-account-sidebar nav{grid-template-columns:repeat(2,minmax(0,1fr))}.cvx-account-cards{grid-template-columns:1fr}}
