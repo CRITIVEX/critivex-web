@@ -9,13 +9,10 @@ const size=24,from=(page-1)*size;
 const sections=type==='all'?['games','reviews','news']:[type];
 const results=await Promise.allSettled(sections.map(async section=>{
 if(section==='games'){
-let q=c.from('games').select('slug,title,release_date');
 if(term.length<3)return {hasMore:false,items:[] as SearchItem[]};
-q=q.ilike('title','%'+term+'%');
-if(sort!=='az')q=q.not('release_date','is',null);
-const {data,error}=await q.order(sort==='az'?'title':'release_date',{ascending:sort==='az',nullsFirst:false}).order('id').range(from,from+size);
+const {data,error}=await c.rpc('browse_games',{search_term:term,sort_mode:sort==='az'?'az':'new',page_offset:from,page_size:size+1});
 if(error){console.error('Game search failed',error.code,error.message);throw new Error('Game search failed')}
-return {hasMore:(data?.length??0)>size,items:(data??[]).slice(0,size).map(g=>({title:g.title,description:'',url:'/games/'+g.slug,type:'Games',date:g.release_date??''}))};
+return {hasMore:(data?.length??0)>size,items:(data??[]).slice(0,size).map((g:{title:string;description:string|null;slug:string;release_date:string|null})=>({title:g.title,description:g.description??'',url:'/games/'+g.slug,type:'Games',date:g.release_date??''}))};
 }
 let q=c.from('articles').select('slug,title,summary,published_at').eq('kind',section==='reviews'?'review':'news').lte('published_at',new Date().toISOString());
 if(term)q=q.or('title.ilike.%'+term+'%,summary.ilike.%'+term+'%');
