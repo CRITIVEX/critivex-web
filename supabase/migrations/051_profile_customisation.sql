@@ -1,0 +1,11 @@
+begin;
+create table public.player_appearance(user_id uuid primary key default auth.uid() references auth.users(id) on delete cascade,accent text not null default 'purple' check(accent in ('purple','blue','green','red','orange','pink','slate')),tagline text not null default '' check(char_length(tagline)<=80),layout text not null default 'standard' check(layout in ('standard','compact','centered')));
+alter table public.player_appearance enable row level security;
+create policy appearance_read on public.player_appearance for select using(user_id=auth.uid() or (exists(select 1 from public.profiles p where p.user_id=player_appearance.user_id and p.is_public) and not public.social_blocked(user_id)));
+create policy appearance_insert on public.player_appearance for insert to authenticated with check(user_id=auth.uid());
+create policy appearance_update on public.player_appearance for update to authenticated using(user_id=auth.uid()) with check(user_id=auth.uid());
+revoke all on public.player_appearance from anon,authenticated;
+grant select on public.player_appearance to anon,authenticated;
+grant insert(accent,tagline,layout),update(accent,tagline,layout) on public.player_appearance to authenticated;
+notify pgrst,'reload schema';
+commit;
