@@ -6,11 +6,11 @@ export const metadata={title:'Player profile',robots:{index:false,follow:false}}
 type Props={params:Promise<{username:string}>};
 function image(value:string|null){try{const u=new URL(value??'');return u.protocol==='https:'?u.href:null}catch{return null}}
 export default async function Player({params}:Props){
- const {username}=await params;if(!/^[a-z0-9_]{3,24}$/.test(username))notFound();
+ const {username}=await params;if(!/^[A-Za-z0-9_]{3,24}$/.test(username))notFound();
  const url=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
  if(!url||!key)return <section className="panel"><h1>Profile unavailable</h1></section>;
  const c=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},global:{fetch:(input,init)=>fetch(input,{...init,cache:'no-store'})}});
- const {data:p,error}=await c.from('profiles').select('user_id,username,display_name,bio,avatar_url,banner_url').eq('username',username).eq('is_public',true).maybeSingle();
+ const {data:p,error}=await c.from('profiles').select('user_id,username,display_name,bio,avatar_url,banner_url').ilike('username',username.replace(/_/g,'\\_')).eq('is_public',true).maybeSingle();
  if(error)return <section className="panel"><h1>Profile temporarily unavailable</h1></section>;if(!p)notFound();
  const [collections,reviews]=await Promise.all([c.from('game_collections').select('id,name,description,cover_url').eq('user_id',p.user_id).eq('is_public',true).order('created_at',{ascending:false}).limit(12),c.from('player_reviews').select('id,body,created_at,games(title,slug)').eq('user_id',p.user_id).eq('status','approved').order('created_at',{ascending:false}).limit(12)]);
  const avatar=image(p.avatar_url),banner=image(p.banner_url),name=p.display_name||p.username;
