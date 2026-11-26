@@ -1,0 +1,30 @@
+name: IGDB daily catalogue sync
+on:
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: igdb-catalogue-import
+  cancel-in-progress: false
+jobs:
+  sync:
+    if: vars.IGDB_AUTO_SYNC_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+      IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+      IGDB_FULL_IMPORT: 'true'
+      IGDB_START_ID: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Set overlapping update window
+        run: echo "IGDB_UPDATED_SINCE=$(date -u -d '7 days ago' +%s)" >> "$GITHUB_ENV"
+      - run: node scripts/igdb-sync.mjs
