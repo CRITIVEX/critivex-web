@@ -208,3 +208,28 @@ main .game-copy .unrated{border-color:#51416b;color:#ddd6fe}
 .cvx-header-actions .header-search-popover{left:0;right:auto;width:min(420px,calc(100vw - 32px))}
 .cvx-header-actions>.cta{flex-shrink:0}
 }
+
+/* Loading and interaction polish */
+.cvx-loading{display:grid;gap:22px;padding:8px 0 32px}
+.cvx-skeleton{background:#24212c;border-radius:10px;animation:cvx-pulse 1.6s ease-in-out infinite}
+.cvx-skeleton-hero{height:clamp(150px,22vw,260px)}
+.cvx-skeleton-detail{height:clamp(240px,35vw,460px)}
+.cvx-skeleton-heading{height:24px;width:min(240px,65%)}
+.cvx-skeleton-summary{height:110px}
+.cvx-skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:18px}
+.cvx-skeleton-card{border:1px solid #302d39;border-radius:14px;padding:12px;display:grid;gap:12px;background:#141419}
+.cvx-skeleton-art{aspect-ratio:4/4.5}
+.cvx-skeleton-line{height:16px;width:90%}
+.cvx-skeleton-short{height:12px;width:55%}
+.cvx-skeleton-score-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cvx-skeleton-score{height:132px}
+@keyframes cvx-pulse{0%,100%{opacity:.65}50%{opacity:1}}
+@keyframes cvx-enter{from{opacity:.85;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.cvx-site-header .cvx-main-nav a,.cta,.secondary,.header-result,.cvx-media-thumbs button,.cvx-media-controls button,.cvx-review-list-card{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease}
+.header-search-popover,.cvx-media-dialog[open]{animation:cvx-enter .16s ease-out}
+.cvx-score-progress{transition:stroke-dasharray .3s ease}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #a78bfa;outline-offset:3px}
+button:disabled{cursor:not-allowed}
+@media(max-width:600px){.cvx-skeleton-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cvx-skeleton-score-grid{grid-template-columns:1fr}}
+@media(max-width:350px){.cvx-skeleton-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.cvx-skeleton,.header-search-popover,.cvx-media-dialog[open]{animation:none}.cvx-site-header .cvx-main-nav a,.cta,.secondary,.header-result,.cvx-media-thumbs button,.cvx-media-controls button,.cvx-review-list-card,.cvx-score-progress{transition:none}}
