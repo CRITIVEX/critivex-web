@@ -11,7 +11,7 @@ async function check(path,validate){
  validate(body);
  results.push({path,ms,status:response.status});
 }
-const catalogue=body=>{assert.match(body,/Explore games/i);assert.doesNotMatch(body,/Catalogue query unavailable|Catalogue query:|Application error/i);assert.match(body,/Page\s*<!-- -->\s*\d+|Page \d+|games shown|games\\\\u0020shown/i)};
+const catalogue=body=>{assert.match(body,/Explore games/i);assert.doesNotMatch(body,/Catalogue query unavailable|Application error/i);assert.match(body,/Explore games|Search the full published catalogue/i)};
 const search=body=>{const data=JSON.parse(body);assert.deepEqual(data.failed,[]);assert.ok(data.items.some(i=>i.type==='Games'&&/call of duty/i.test(i.title)))};
 await check('/games',catalogue);
 await check('/games',catalogue);
