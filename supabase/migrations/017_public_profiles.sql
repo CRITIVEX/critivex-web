@@ -1,0 +1,15 @@
+begin;
+alter table public.profiles add column if not exists username text;
+alter table public.profiles add column if not exists is_public boolean not null default true;
+alter table public.profiles add column if not exists avatar_url text;
+alter table public.profiles add column if not exists banner_url text;
+alter table public.profiles add constraint profiles_username_format check (username is null or username ~ '^[a-z0-9_]{3,24}$');
+alter table public.profiles add constraint profiles_avatar_https check (avatar_url is null or (char_length(avatar_url)<=500 and avatar_url ~ '^https://'));
+alter table public.profiles add constraint profiles_banner_https check (banner_url is null or (char_length(banner_url)<=500 and banner_url ~ '^https://'));
+create unique index if not exists profiles_username_unique on public.profiles(username) where username is not null;
+drop policy if exists profiles_read on public.profiles;
+create policy profiles_read on public.profiles for select using (is_public or user_id=auth.uid());
+grant select on public.profiles to anon,authenticated;
+grant insert,update on public.profiles to authenticated;
+notify pgrst,'reload schema';
+commit;
