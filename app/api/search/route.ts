@@ -22,7 +22,7 @@ export async function GET(request:Request){
  const retry=allow(request.headers.get('cf-connecting-ip')??'unknown');
  if(retry)return Response.json({items:[],failed:['Search rate limit'],message:'Too many searches. Please try again shortly.'},{status:429,headers:{'Retry-After':String(retry),'Cache-Control':'no-store'}});
  try{const result=await globalSearch(q,'all','az',1);
- const items=['Games','Reviews','News'].flatMap(type=>result.items.filter(i=>i.type===type).sort((a,b)=>Number(b.title.toLowerCase()===q.toLowerCase())-Number(a.title.toLowerCase()===q.toLowerCase())).slice(0,type==='Games'?6:3).map(({title,url,type,date})=>({title,url,type,date})));
+ const items=['Games','Reviews','News'].flatMap(type=>result.items.filter(i=>i.type===type).sort((a,b)=>Number(b.title.toLowerCase()===q.toLowerCase())-Number(a.title.toLowerCase()===q.toLowerCase())).slice(0,type==='Games'?6:3).map((item)=>({title:item.title,url:item.url,type:item.type,date:item.date,coverImageId:'coverImageId' in item?item.coverImageId:null})));
  return Response.json({items,failed:result.failed},{headers:{'Cache-Control':'no-store'}});
  }catch{return Response.json({items:[],failed:['Search']},{status:503})}
 }
