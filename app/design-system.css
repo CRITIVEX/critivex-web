@@ -107,3 +107,10 @@ p{color:#b4b4c0;line-height:1.65}.eyebrow{letter-spacing:.12em;color:#c4b5fd}
 .cvx-affiliations{display:inline-flex;align-items:center;gap:5px;vertical-align:middle;margin-inline:4px}.cvx-affiliation{position:relative;display:inline-flex;width:22px;height:22px;vertical-align:middle}.cvx-affiliation img{width:100%;height:100%;object-fit:contain;border-radius:4px;background:#25252e}.cvx-affiliation-tooltip{display:none;position:absolute;z-index:30;top:calc(100% + 8px);left:0;width: min(230px,70vw);white-space:normal;background:#25252e;color:#fafafa;border:1px solid #52525b;border-radius:8px;padding:10px;font-size:12px;font-weight:400;line-height:1.5;box-shadow:0 6px 20px #0006}.cvx-affiliation:hover .cvx-affiliation-tooltip,.cvx-affiliation:focus-visible .cvx-affiliation-tooltip{display:block}.cvx-trusted-badge.organisation{color:#f5d16b;background:#33280e;border-color:#d4a72c}
 
 .cvx-verification-layout{display:grid;gap:18px;max-width:900px;margin:auto}.cvx-trusted-badge.government{color:#e4e4e7;background:#34343b;border-color:#a1a1aa}.cvx-trusted-badge.verified{color:#93c5fd;background:#172b4d;border-color:#3b82f6}
+
+/* Consistent profile banner proportions */
+.cvx-overview-hero .cvx-overview-banner,.cvx-public-player .cvx-public-banner{height:auto;aspect-ratio:3/1;min-height:0;overflow:hidden;padding:0}
+.cvx-overview-banner span{margin:12px}.cvx-overview-banner img{display:block;object-fit:cover;object-position:center}
+.cvx-upload-preview.banner,.cvx-banner-crop{width:100%;height:auto;aspect-ratio:3/1;overflow:hidden;position:relative;border-radius:8px;background:#18181f}
+.cvx-banner-crop img{display:block;width:100%;height:100%;object-fit:cover}
+.cvx-banner-editor{display:grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:12px}.cvx-banner-editor input[type=range]{width:100%;padding:0;accent-color:#8b5cf6}
