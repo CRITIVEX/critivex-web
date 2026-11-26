@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useMemo,useState} from 'react';
+import {useEffect,useMemo,useState,useRef} from 'react';
 import {browserClient} from '../../lib/supabase';
 const extensions:Record<string,string>={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};
 export function ImagePicker({file,onChange,disabled}:{file:File[];onChange:(f:File[])=>void;disabled:boolean}){
@@ -15,10 +15,10 @@ export async function publishPost(c:NonNullable<ReturnType<typeof browserClient>
  }catch(error){if(paths.length)await c.storage.from('social-images').remove(paths);return {error}}
 }
 export function PostCarousel({id,path,uid}:{id:string;path:string|null;uid:string}){
- const c=useMemo(browserClient,[]),[paths,P]=useState<string[]>([]),[index,I]=useState(0);
+ const c=useMemo(browserClient,[]),[paths,P]=useState<string[]>([]),[index,I]=useState(0);const touch=useRef<{x:number;y:number}|null>(null);
  useEffect(()=>{P([]);I(0);if(!c)return;let active=true;void Promise.resolve(c.from('social_posts').select('image_paths').eq('id',id).maybeSingle()).then(r=>{if(active&&!r.error)P(r.data?.image_paths??[])}).catch(()=>{});return()=>{active=false}},[c,id,uid]);
  const images=paths.length?paths:path?[path]:[];
- if(!images.length)return null;return <div className="cvx-post-carousel"><PostImage path={images[Math.min(index,images.length-1)]} uid={uid}/>{images.length>1&&<div className="cvx-carousel-controls"><button type="button" disabled={index===0} onClick={()=>I(i=>i-1)}>← Previous</button><span>{index+1} / {images.length}</span><button type="button" disabled={index>=images.length-1} onClick={()=>I(i=>i+1)}>Next →</button></div>}</div>
+ if(!images.length)return null;return <div className="cvx-post-carousel" onTouchStart={e=>{const t=e.touches[0];touch.current=e.touches.length===1?{x:t.clientX,y:t.clientY}:null}} onTouchCancel={()=>{touch.current=null}} onTouchEnd={e=>{const start=touch.current;touch.current=null;const t=e.changedTouches[0];if(!start||!t)return;const dx=t.clientX-start.x,dy=t.clientY-start.y;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5)I(i=>Math.max(0,Math.min(images.length-1,i+(dx<0?1:-1))))}}><PostImage path={images[Math.min(index,images.length-1)]} uid={uid}/>{images.length>1&&<div className="cvx-carousel-controls"><button type="button" disabled={index===0} onClick={()=>I(i=>i-1)}>← Previous</button><span aria-live="polite">{index+1} / {images.length}</span><button type="button" disabled={index>=images.length-1} onClick={()=>I(i=>i+1)}>Next →</button></div>}</div>
 }
 export function PostImage({path,uid}:{path:string|null;uid:string}){
  const c=useMemo(browserClient,[]),[url,U]=useState(''),[failed,F]=useState(false);
