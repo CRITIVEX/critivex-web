@@ -1,2 +1,3 @@
+import Library from './library';
 import Profile from './profile';
-import Account from './account';export const metadata={title:'Account',robots:{index:false,follow:false}};export default function Page(){return <><h1>Your Critivex account.</h1><Account/><Profile/></>}
+import Account from './account';export const metadata={title:'Account',robots:{index:false,follow:false}};export default function Page(){return <><h1>Your Critivex account.</h1><Account/><Profile/><Library/></>}
