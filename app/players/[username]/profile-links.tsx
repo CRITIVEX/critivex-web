@@ -1,0 +1,14 @@
+'use client';
+import {useEffect,useMemo,useState} from 'react';
+import {browserClient} from '../../../lib/supabase';
+const platforms={twitch:'Twitch',youtube:'YouTube',discord:'Discord',tiktok:'TikTok',instagram:'Instagram',x:'X',steam:'Steam',website:'Website'} as const;
+type Platform=keyof typeof platforms;
+type SocialLink={platform:Platform;url:string};
+function safe(value:string){try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password?u.href:null}catch{return null}}
+export default function ProfileLinks({id}:{id:string}){
+ const c=useMemo(browserClient,[]),[uid,U]=useState(''),[rows,R]=useState<SocialLink[]>([]),[platform,P]=useState<Platform>('twitch'),[url,L]=useState(''),[ready,T]=useState(false),[busy,B]=useState(false),[error,E]=useState(''),[revision,V]=useState(0);
+ useEffect(()=>{if(!c)return;const {data:{subscription}}=c.auth.onAuthStateChange((_e,s)=>U(s?.user.id??''));return()=>subscription.unsubscribe()},[c]);
+ useEffect(()=>{R([]);T(false);E('');if(!c)return;let active=true;void Promise.resolve(c.from('player_links').select('platform,url').eq('user_id',id).order('platform')).then(r=>{if(!active)return;if(r.error)E('Social links unavailable.');else{R((r.data??[]) as SocialLink[]);T(true)}}).catch(()=>{if(active)E('Social links unavailable.')});return()=>{active=false}},[c,id,uid,revision]);
+ async function save(remove?:Platform){if(!c||uid!==id||busy)return;const href=safe(url.trim());if(!remove&&(!href||href.length>500)){E('Enter a valid HTTPS link.');return}B(true);E('');try{const existing=rows.some(x=>x.platform===platform);const r=remove?await c.from('player_links').delete().eq('user_id',uid).eq('platform',remove):existing?await c.from('player_links').update({url:href}).eq('user_id',uid).eq('platform',platform):await c.from('player_links').insert({platform,url:href});if(r.error)throw r.error;L('');V(v=>v+1)}catch{E('Unable to save social links.')}finally{B(false)}}
+ return <section className="panel cvx-profile-links"><h2>Social links</h2>{rows.map(r=>safe(r.url)&&<div key={r.platform}><a href={safe(r.url)!} target="_blank" rel="noopener noreferrer nofollow ugc">{platforms[r.platform]} ↗</a>{uid===id&&<button type="button" disabled={busy} onClick={()=>void save(r.platform)}>Remove</button>}</div>)}{ready&&!rows.length&&<p>No social links yet.</p>}{ready&&uid===id&&<form onSubmit={e=>{e.preventDefault();void save()}}><label>Platform<select disabled={busy} value={platform} onChange={e=>{const p=e.target.value as Platform;P(p);L(rows.find(x=>x.platform===p)?.url??'')}}>{Object.entries(platforms).map(([k,v])=><option key={k} value={k}>{v}</option>)}</select></label><label>Profile URL<input type="url" required maxLength={500} disabled={busy} value={url} onChange={e=>L(e.target.value)} placeholder="https://…"/></label><button type="submit" disabled={busy||!url.trim()}>Save link</button></form>}{error&&<p role="alert">{error}</p>}</section>
+}
