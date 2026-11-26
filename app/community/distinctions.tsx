@@ -1,0 +1,7 @@
+'use client';
+import {useEffect,useMemo,useState} from 'react';
+import Link from 'next/link';
+import {browserClient} from '../../lib/supabase';
+export function Badge({kind}:{kind:string|null}){return kind?<span className="cvx-trusted-badge" title={kind==='founder'?'Critivex founder — verified identity':kind==='official'?'Official Critivex account':'Verified account'}>{kind==='founder'?'◆ Founder ✓':kind==='official'?'◆ Official ✓':'✓ Verified'}</span>:null}
+type Featured={user_id:string;kind:string;profiles:{username:string;display_name:string|null}|null};
+export function FeaturedPlayers(){const c=useMemo(browserClient,[]),[rows,R]=useState<Featured[]>([]);useEffect(()=>{if(!c)return;let active=true;async function load(){const d=await c!.from('player_distinctions').select('user_id,kind').eq('featured',true).limit(12);if(d.error||!d.data?.length)return;const p=await c!.from('profiles').select('user_id,username,display_name').in('user_id',d.data.map(x=>x.user_id));if(active)R(d.data.map(x=>({...x,profiles:p.data?.find(y=>y.user_id===x.user_id)??null})))}void load().catch(()=>{});return()=>{active=false}},[c]);return rows.some(x=>x.profiles?.username)?<section className="panel cvx-featured-players"><h2>Recommended accounts</h2>{rows.map(x=>x.profiles?.username?<div key={x.user_id}><Link href={'/players/'+encodeURIComponent(x.profiles.username)}>{x.profiles.display_name||x.profiles.username}</Link> <Badge kind={x.kind}/></div>:null)}</section>:null}
