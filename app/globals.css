@@ -255,3 +255,13 @@ button:disabled{cursor:not-allowed}
 .cvx-collection-cover{width:100%;max-height:280px;object-fit:cover;border-radius:10px;margin-bottom:16px}
 .cvx-collection-game-art{width:100%;height:180px;object-fit:contain}
 @media(max-width:700px){.cvx-collection-layout{grid-template-columns:1fr}}
+
+.cvx-activity-tabs,.cvx-activity-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0}
+.cvx-activity-item{border:1px solid #393244;border-radius:10px;padding:16px;margin:12px 0;background:#17151e}
+.cvx-activity-row a{flex:1;min-width:120px;overflow-wrap:anywhere;font-weight:700}
+.cvx-activity-score{color:#c4b5fd;font-size:22px}
+.cvx-activity-status{border-radius:6px;padding:5px 9px;background:#302b39;text-transform:capitalize;font-size:12px}
+.cvx-activity-status.approved{color:#86efac}.cvx-activity-status.pending{color:#fde68a}.cvx-activity-status.rejected{color:#fda4af}
+.cvx-activity-body{white-space:pre-wrap;overflow-wrap:anywhere}
+.cvx-activity time{color:#a1a1aa;font-size:12px}
+.cvx-activity select{background:#17151e;border:1px solid #393244;padding:8px;border-radius:6px}
