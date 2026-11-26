@@ -94,3 +94,18 @@ main .game-copy .unrated{border-color:#51416b;color:#ddd6fe}
 @media(max-width:600px){.header-search{width:100%}.header-search-popover{left:0;right:auto}.header-actions{width:100%;flex-wrap:nowrap}}
 
 .account-panel{gap:18px}.account-panel button:disabled{opacity:.55;cursor:wait}.account-feedback,.account-error{padding:12px;border-radius:8px;background:#211932;border:1px solid #51416b;color:#ddd6fe;font-size:14px}.account-error{background:#30171e;border-color:#733743;color:#fecdd3}.account-grid:has(>div:nth-child(2):empty){grid-template-columns:minmax(0,560px);justify-content:center}.account-grid textarea{min-height:120px}.account-grid input:focus,.account-grid textarea:focus{border-color:#a78bfa}
+
+.game-detail-hero{position:relative;isolation:isolate;overflow:hidden;border:1px solid #393044;border-radius:20px;margin:18px 0;background:#17131f;min-height:320px;display:flex;align-items:flex-end}
+.game-detail-backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.game-detail-hero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#09090bf5,#09090bd9 40%,#09090b60),linear-gradient(0deg,#09090b 0%,transparent 90%)}
+.game-detail-hero-content{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:end;gap:clamp(18px,4vw,42px);padding:clamp(20px,4vw,48px);width:100%}
+.game-detail-hero-content>div:only-child{grid-column:1/-1}
+.game-detail-cover{width:clamp(120px,18vw,220px);aspect-ratio:264/374;object-fit:cover;border-radius:12px;box-shadow:0 12px 35px #0009;border:1px solid #ffffff25}
+.game-detail-hero h1{font-size:clamp(30px,5vw,64px);line-height:1.05;margin:12px 0}
+.game-platform{border:1px solid #ffffff30;background:#111116c9;border-radius:6px;padding:5px 9px;font-size:12px;color:#e4e4e7}
+.game-section-nav{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid #35313e;padding:8px 0 14px;margin-bottom:20px}
+.game-section-nav a{padding:9px 14px;border-radius:7px;color:#d4d4d8}
+.game-section-nav a:hover,.game-section-nav a:focus-visible{background:#302044;color:#fff}
+.game-description{white-space:pre-line;line-height:1.8;max-width:90ch}
+#overview,#ratings,#collection,#media,#reviews{scroll-margin-top:110px}
+@media(max-width:600px){.game-detail-hero-content{grid-template-columns:1fr;align-items:start}.game-detail-cover{width:130px}.game-detail-hero h1{font-size:34px}.game-detail-hero:before{background:linear-gradient(0deg,#09090b 10%,#09090bc0 75%,#09090b60)}}
