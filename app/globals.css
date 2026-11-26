@@ -130,3 +130,21 @@ main .game-copy .unrated{border-color:#51416b;color:#ddd6fe}
 .header-result .header-result-copy{display:flex;flex-direction:column;min-width:0;gap:4px}
 .header-result-copy strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .header-result{min-height:64px}
+
+/* Premium catalogue */
+.cvx-catalogue{grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:18px}
+.cvx-catalogue .cvx-catalogue-card{padding:0;overflow:hidden;border-radius:14px;background:#141419;border:1px solid #302d39;transition:border-color .18s,transform .18s,box-shadow .18s}
+.cvx-catalogue-card:hover,.cvx-catalogue-card:focus-visible{border-color:#8b5cf6;transform:translateY(-3px);box-shadow:0 12px 30px #0005}
+.cvx-catalogue .cvx-catalogue-art{position:relative;height:auto;aspect-ratio:4/4.5;display:grid;place-items:center;background:radial-gradient(ellipse at top,#332844,#111116 75%);overflow:hidden;border-radius:0}
+.cvx-catalogue-art img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;padding:12px}
+.cvx-cover-placeholder{font-size:42px;font-weight:800;color:#a78bfa}
+.cvx-catalogue-year{position:absolute;right:10px;top:10px;background:#09090be8;border:1px solid #ffffff30;border-radius:6px;padding:4px 8px;color:white;font-size:11px;font-weight:700}
+.cvx-catalogue .cvx-catalogue-copy{display:flex;flex-direction:column;flex:1;padding:16px;gap:8px;min-width:0}
+.cvx-catalogue-copy h3{font-size:17px;line-height:1.35;margin:0;overflow-wrap:anywhere}
+.cvx-catalogue-copy .cvx-catalogue-developer{font-size:12px;color:#a1a1aa;margin:0}
+.cvx-catalogue-platforms{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.cvx-catalogue-platforms span{font-size:10px;padding:3px 6px;border:1px solid #3b3548;border-radius:5px;color:#d4d4d8;overflow-wrap:anywhere}
+.cvx-catalogue-cta{margin-top:auto;border-top:1px solid #302d39;padding-top:12px;display:flex;justify-content:space-between;color:#b49aff;font-size:12px;font-weight:600}
+@media(max-width:600px){.cvx-catalogue{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cvx-catalogue .cvx-catalogue-copy{padding:10px}.cvx-catalogue-copy h3{font-size:14px}.cvx-catalogue-art img{padding:6px}}
+@media(max-width:350px){.cvx-catalogue{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.cvx-catalogue .cvx-catalogue-card{transition:none;transform:none}}
