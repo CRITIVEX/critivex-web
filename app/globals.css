@@ -243,3 +243,8 @@ button:disabled{cursor:not-allowed}
 .cvx-player-identity h1{font-size:clamp(28px,5vw,48px);margin:8px 0}
 .cvx-player-bio{padding:20px 24px;border-top:1px solid #35313e;white-space:pre-wrap;overflow-wrap:anywhere}
 .admin-form .cvx-profile-privacy{display:flex;align-items:center;gap:10px}.admin-form .cvx-profile-privacy input{width:auto}
+
+.cvx-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr));gap:12px;margin:20px 0}
+.cvx-stat-card{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid #393244;border-radius:10px;background:#1c1923}
+.cvx-stat-card strong{font-size:28px;color:#c4b5fd;font-variant-numeric:tabular-nums}.cvx-stat-card span{font-size:12px;color:#d4d4d8}
+.cvx-stat-completion progress{display:block;width:100%;height:12px;margin:12px 0;accent-color:#8b5cf6}
